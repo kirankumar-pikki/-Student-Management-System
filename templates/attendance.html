@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Attendance - Student Management System{% endblock %}
+{% block page_title %}Attendance{% endblock %}
+{% block content %}
+
+<div class="panel">
+  <h3 class="panel-title">Record Attendance</h3>
+  <form method="POST" class="grid-form">
+    <div class="form-group">
+      <label for="student_id">Student *</label>
+      <select id="student_id" name="student_id" required>
+        <option value="">Select Student</option>
+        {% for s in all_students %}
+          <option value="{{ s.id }}">{{ s.roll_no }} - {{ s.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="course_id">Course *</label>
+      <select id="course_id" name="course_id" required>
+        <option value="">Select Course</option>
+        {% for c in all_courses %}
+          <option value="{{ c.id }}">{{ c.code }} - {{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="total_classes">Total Classes *</label>
+      <input type="number" id="total_classes" name="total_classes" min="1" required>
+    </div>
+    <div class="form-group">
+      <label for="attended_classes">Attended Classes *</label>
+      <input type="number" id="attended_classes" name="attended_classes" min="0" required>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save Attendance</button>
+    </div>
+  </form>
+</div>
+
+<div class="panel">
+  <h3 class="panel-title">Attendance Records</h3>
+  <div class="table-scroll">
+  <table class="table">
+    <thead>
+      <tr><th>Student</th><th>Course</th><th>Total</th><th>Attended</th><th>%</th><th>Status</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+    {% for r in records %}
+      <tr>
+        <td>{{ r.roll_no }} - {{ r.student_name }}</td>
+        <td>{{ r.course_code }}</td>
+        <td>{{ r.total_classes }}</td>
+        <td>{{ r.attended_classes }}</td>
+        <td>{{ r.percentage }}%</td>
+        <td><span class="badge badge-{{ 'good' if r.status == 'Good' else 'warn' }}">{{ r.status }}</span></td>
+        <td class="actions-cell">
+          <form method="POST" action="{{ url_for('delete_attendance', record_id=r.id) }}"
+                onsubmit="return confirm('Delete this record?');" style="display:inline;">
+            <button type="submit" class="icon-btn icon-btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="7" class="empty-state">No attendance records yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}

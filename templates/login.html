@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Login - Student Management System{% endblock %}
+{% block auth_content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <span class="brand-mark large">SM</span>
+      <h2>Student Management System</h2>
+      <p>Sign in to access the administration dashboard</p>
+    </div>
+    <form method="POST" action="{{ url_for('login') }}" class="auth-form">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="admin" required autofocus>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required>
+
+      <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+    </form>
+    <div class="auth-hint">
+      <strong>Demo login:</strong> admin&nbsp;/&nbsp;admin123
+    </div>
+  </div>
+</div>
+{% endblock %}

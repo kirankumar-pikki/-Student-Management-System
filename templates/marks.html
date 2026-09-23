@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Marks - Student Management System{% endblock %}
+{% block page_title %}Marks / Results{% endblock %}
+{% block content %}
+
+<div class="panel">
+  <h3 class="panel-title">Enter Marks</h3>
+  <form method="POST" class="grid-form">
+    <div class="form-group">
+      <label for="student_id">Student *</label>
+      <select id="student_id" name="student_id" required>
+        <option value="">Select Student</option>
+        {% for s in all_students %}
+          <option value="{{ s.id }}">{{ s.roll_no }} - {{ s.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="course_id">Course *</label>
+      <select id="course_id" name="course_id" required>
+        <option value="">Select Course</option>
+        {% for c in all_courses %}
+          <option value="{{ c.id }}">{{ c.code }} - {{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="internal">Internal Marks (max 40) *</label>
+      <input type="number" id="internal" name="internal" min="0" max="40" required>
+    </div>
+    <div class="form-group">
+      <label for="external">External Marks (max 60) *</label>
+      <input type="number" id="external" name="external" min="0" max="60" required>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save Marks</button>
+    </div>
+  </form>
+</div>
+
+<div class="panel">
+  <h3 class="panel-title">Marks Table</h3>
+  <div class="table-scroll">
+  <table class="table">
+    <thead>
+      <tr><th>Student</th><th>Course</th><th>Internal</th><th>External</th><th>Total</th><th>Grade</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+    {% for r in records %}
+      <tr>
+        <td>{{ r.roll_no }} - {{ r.student_name }}</td>
+        <td>{{ r.course_code }}</td>
+        <td>{{ r.internal }}</td>
+        <td>{{ r.external }}</td>
+        <td>{{ r.total }}</td>
+        <td><span class="badge">{{ r.grade }}</span></td>
+        <td class="actions-cell">
+          <form method="POST" action="{{ url_for('delete_marks', record_id=r.id) }}"
+                onsubmit="return confirm('Delete this record?');" style="display:inline;">
+            <button type="submit" class="icon-btn icon-btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="7" class="empty-state">No marks recorded yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}

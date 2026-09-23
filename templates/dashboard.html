@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Student Management System{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="stat-grid">
+  <div class="stat-card stat-blue">
+    <div class="stat-value">{{ total_students }}</div>
+    <div class="stat-label">Total Students</div>
+  </div>
+  <div class="stat-card stat-green">
+    <div class="stat-value">{{ total_courses }}</div>
+    <div class="stat-label">Total Courses</div>
+  </div>
+  <div class="stat-card stat-orange">
+    <div class="stat-value">{{ total_attendance }}</div>
+    <div class="stat-label">Attendance Records</div>
+  </div>
+  <div class="stat-card stat-purple">
+    <div class="stat-value">{{ total_marks }}</div>
+    <div class="stat-label">Marks Records</div>
+  </div>
+</div>
+
+<div class="quick-actions">
+  <a href="{{ url_for('add_student') }}" class="btn btn-primary">+ Add Student</a>
+  <a href="{{ url_for('courses') }}" class="btn btn-secondary">+ Add Course</a>
+  <a href="{{ url_for('attendance') }}" class="btn btn-secondary">Record Attendance</a>
+  <a href="{{ url_for('marks') }}" class="btn btn-secondary">Enter Marks</a>
+  <a href="{{ url_for('export_students') }}" class="btn btn-outline">Export CSV</a>
+</div>
+
+<div class="grid-2col">
+  <div class="panel">
+    <h3 class="panel-title">Students by Department</h3>
+    {% if by_department %}
+    <table class="table table-compact">
+      <thead><tr><th>Department</th><th>Students</th></tr></thead>
+      <tbody>
+      {% for d in by_department %}
+        <tr><td>{{ d.department }}</td><td>{{ d.c }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p class="empty-state">No students yet.</p>
+    {% endif %}
+  </div>
+
+  <div class="panel">
+    <h3 class="panel-title">Recently Added Students</h3>
+    {% if recent_students %}
+    <table class="table table-compact">
+      <thead><tr><th>Roll No</th><th>Name</th><th>Department</th></tr></thead>
+      <tbody>
+      {% for s in recent_students %}
+        <tr>
+          <td>{{ s.roll_no }}</td>
+          <td><a href="{{ url_for('view_student', student_id=s.id) }}">{{ s.name }}</a></td>
+          <td>{{ s.department }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p class="empty-state">No students yet.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

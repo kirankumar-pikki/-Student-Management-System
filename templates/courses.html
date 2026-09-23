@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Courses - Student Management System{% endblock %}
+{% block page_title %}Courses{% endblock %}
+{% block content %}
+
+<div class="grid-2col">
+  <div class="panel">
+    <h3 class="panel-title">Add Course</h3>
+    <form method="POST" class="grid-form">
+      <div class="form-group">
+        <label for="code">Course Code *</label>
+        <input type="text" id="code" name="code" placeholder="CS401" required>
+      </div>
+      <div class="form-group">
+        <label for="name">Course Name *</label>
+        <input type="text" id="name" name="name" placeholder="Web Technologies" required>
+      </div>
+      <div class="form-group">
+        <label for="department">Department *</label>
+        <select id="department" name="department" required>
+          <option value="">Select</option>
+          {% for d in departments %}
+            <option value="{{ d }}">{{ d }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="credits">Credits *</label>
+        <input type="number" id="credits" name="credits" min="1" max="10" required>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Add Course</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h3 class="panel-title">Search Courses</h3>
+    <form method="GET" action="{{ url_for('courses') }}" class="toolbar-form">
+      <input type="text" name="q" value="{{ q }}" placeholder="Search by code, name or department...">
+      <button type="submit" class="btn btn-secondary">Search</button>
+      {% if q %}<a href="{{ url_for('courses') }}" class="btn btn-outline">Clear</a>{% endif %}
+    </form>
+    <p class="table-meta">{{ courses|length }} course(s) shown</p>
+  </div>
+</div>
+
+<div class="panel">
+  <h3 class="panel-title">All Courses</h3>
+  <div class="table-scroll">
+  <table class="table">
+    <thead><tr><th>Code</th><th>Name</th><th>Department</th><th>Credits</th><th>Actions</th></tr></thead>
+    <tbody>
+    {% for c in courses %}
+      <tr>
+        <td>{{ c.code }}</td>
+        <td>{{ c.name }}</td>
+        <td><span class="badge">{{ c.department }}</span></td>
+        <td>{{ c.credits }}</td>
+        <td class="actions-cell">
+          <a href="{{ url_for('edit_course', course_id=c.id) }}" class="icon-btn">Edit</a>
+          <form method="POST" action="{{ url_for('delete_course', course_id=c.id) }}"
+                onsubmit="return confirm('Delete this course?');" style="display:inline;">
+            <button type="submit" class="icon-btn icon-btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5" class="empty-state">No courses found.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}
