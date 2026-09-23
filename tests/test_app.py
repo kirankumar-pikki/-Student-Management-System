@@ -40,6 +40,12 @@ def login(client, username="admin", password="admin123"):
         data={"username": username, "password": password},
         follow_redirects=True,
     )
+def login(client, username="pawan", password="pawan123"):
+    return client.post(
+        "/login",
+        data={"username": username, "password": password},
+        follow_redirects=True,
+    )
 
 
 # ---------------------------------------------------------------------------
